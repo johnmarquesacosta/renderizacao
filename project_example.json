@@ -1,0 +1,96 @@
+{
+  "title": "Meu Vídeo — POC",
+  "audio": "audio.wav",
+  "fps": 30,
+  "resolution": [1920, 1080],
+  "output": "output.mp4",
+  "transitions": {
+    "default": "crossfade",
+    "duration": 0.5
+  },
+
+  "_comentarios": {
+    "types": "single | mosaic",
+    "effects": "ken_burns_in | ken_burns_out | ken_burns_pan_left | ken_burns_pan_right | ken_burns_up | ken_burns_down | ken_burns_drift_in | ken_burns_drift_out | ken_burns_random",
+    "overlays": "grain | vignette | desaturate  (lista, pode combinar)"
+  },
+
+  "scenes": [
+
+    {
+      "id": 1,
+      "type": "single",
+      "duration": 5.0,
+      "images": ["images/scene_1.jpeg"],
+      "effect": "ken_burns_in",
+      "overlay": ["grain", "vignette"],
+      "transition_out": "crossfade"
+    },
+
+    {
+      "id": 2,
+      "type": "single",
+      "duration": 4.5,
+      "images": ["images/scene_2.jpeg"],
+      "effect": "ken_burns_pan_right",
+      "overlay": ["grain", "vignette", "desaturate"],
+      "transition_out": "crossfade"
+    },
+
+    {
+      "id": 3,
+      "type": "mosaic",
+      "duration": 8.0,
+      "images": [
+        "images/scene_3.jpeg",
+        "images/scene_4.jpeg",
+        "images/scene_5.jpeg"
+      ],
+      "appear_interval": 1.5,
+      "slide_duration": 0.42,
+      "effect": "ken_burns_random",
+      "overlay": ["grain"],
+      "bg_color": [12, 12, 12],
+      "transition_out": "crossfade"
+    },
+
+    {
+      "id": 4,
+      "type": "single",
+      "duration": 4.0,
+      "images": ["images/scene_6.jpeg"],
+      "effect": "ken_burns_out",
+      "overlay": ["grain", "vignette"],
+      "transition_out": "crossfade"
+    },
+
+    {
+      "id": 5,
+      "type": "mosaic",
+      "duration": 10.0,
+      "images": [
+        "images/scene_7.jpeg",
+        "images/scene_8.jpeg",
+        "images/scene_9.jpeg",
+        "images/scene_10.jpeg"
+      ],
+      "appear_interval": 1.8,
+      "slide_duration": 0.4,
+      "effect": "ken_burns_in",
+      "overlay": ["grain"],
+      "bg_color": [8, 8, 8],
+      "transition_out": "crossfade"
+    },
+
+    {
+      "id": 6,
+      "type": "single",
+      "duration": 5.5,
+      "images": ["images/scene_11.jpeg"],
+      "effect": "ken_burns_drift_in",
+      "overlay": ["grain", "vignette"],
+      "transition_out": "crossfade"
+    }
+
+  ]
+}
