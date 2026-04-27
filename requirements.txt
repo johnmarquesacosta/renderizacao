@@ -8,3 +8,5 @@ numpy>=1.24
 # Opcional mas fortemente recomendado — resize ~8x mais rápido
 # pip install opencv-python
 opencv-python>=4.8
+requests>=2.31.0
+python-dotenv>=1.0.0
