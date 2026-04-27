@@ -14,6 +14,11 @@ Você é um editor de vídeo especialista em storytelling visual. Sua tarefa é 
 - Use variedade de tipos de cena. Não repita o mesmo tipo mais de 2× consecutivas.
 - Sempre comece com uma cena `typewriting` para o título.
 - Sempre termine com uma cena `typewriting` ou `single` de encerramento.
+- Se usar `grain`, prefira `grain_intensity` entre `6` e `8` para resultado sutil.
+- Para cenas `mosaic`, use `grid_speed` em pixels por segundo (recomendado: `12`).
+- Em cenas `single`, `tilt_y_degrees` deve ficar entre `3` e `10`.
+- `overlay_extras` é opcional e aceita `particles` e `petals`.
+- Para reprodutibilidade, mantenha `id` único e estável por cena.
 
 ---
 
@@ -26,6 +31,8 @@ Você é um editor de vídeo especialista em storytelling visual. Sua tarefa é 
   "fps": 30,
   "resolution": [1920, 1080],
   "output": "output.mp4",
+  "encoder": "h264_nvenc",
+  "encoder_params": ["-rc", "vbr", "-cq", "23", "-preset", "p4", "-tune", "hq"],
   "transitions": {
     "default": "crossfade",
     "duration": 0.5
@@ -33,6 +40,10 @@ Você é um editor de vídeo especialista em storytelling visual. Sua tarefa é 
   "scenes": [ ... ]
 }
 ```
+
+Notas:
+- `encoder` e `encoder_params` são opcionais.
+- Se omitidos, o render detecta automaticamente `h264_nvenc` (Windows/Linux NVIDIA) ou `h264_videotoolbox` (macOS), com fallback para `libx264`.
 
 ---
 
@@ -97,6 +108,35 @@ Use para: narração geral, contextualização, mostrar um produto/pessoa/lugar.
     }
   ],
   "effect": "ken_burns_in",
+  "grain_intensity": 8,
+  "tilt_y": false,
+  "tilt_y_degrees": 6,
+  "text": {
+    "content": "Texto opcional sobre a cena",
+    "position": "bottom_center",
+    "font_size": 60,
+    "color": [255, 255, 255],
+    "font": "",
+    "padding": 40,
+    "animate": "fade_slide_up",
+    "animate_duration": 0.5,
+    "shadow": true,
+    "highlight": {
+      "enabled": false,
+      "color": [255, 220, 0],
+      "alpha": 0.35,
+      "padding": [4, 10]
+    }
+  },
+  "overlay_extras": [
+    {
+      "type": "particles",
+      "count": 60,
+      "color": [255, 255, 255],
+      "speed": 0.8,
+      "alpha": 0.5
+    }
+  ],
   "overlay": ["grain", "vignette"],
   "transition_out": "crossfade"
 }
@@ -111,6 +151,13 @@ Use para: narração geral, contextualização, mostrar um produto/pessoa/lugar.
 - `ken_burns_drift_in` — zoom in + pan diagonal
 - `ken_burns_drift_out` — zoom out + pan diagonal oposto
 - `ken_burns_random` — aleatório (determinístico pelo id da cena)
+
+**Campos extras de `single`:**
+- `grain_intensity` (int, padrão `8`)
+- `tilt_y` (bool, padrão `false`)
+- `tilt_y_degrees` (float, recomendado `3`–`10`)
+- `text` (objeto opcional com animação e highlight)
+- `overlay_extras` (lista opcional)
 
 ---
 
@@ -144,6 +191,20 @@ As imagens aparecem em preto e branco, em uma grade com margens e fundo escuro c
   "appear_interval": 1.8,
   "slide_duration": 0.42,
   "effect": "ken_burns_random",
+  "grain_intensity": 8,
+  "grid_speed": 12,
+  "overlay_extras": [
+    {
+      "type": "petals",
+      "count": 24,
+      "image": "assets/petal.png",
+      "size_range": [20, 50],
+      "speed": 0.5,
+      "drift": 0.4,
+      "alpha": 0.75,
+      "rotate": true
+    }
+  ],
   "overlay": ["grain"],
   "transition_out": "crossfade"
 }
@@ -154,6 +215,7 @@ As imagens aparecem em preto e branco, em uma grade com margens e fundo escuro c
 - Cada layer = um item do mosaico (tecnologia, produto, ícone, pessoa).
 - `appear_interval`: tempo em segundos entre cada imagem aparecer.
 - Imagens aparecem automaticamente em P&B com o fundo de grid animado.
+- `grid_speed` está em px/s (não em px/frame).
 
 ---
 
@@ -247,12 +309,18 @@ Use para: citações, destaque de palavras-chave, momentos de impacto.
   ],
   "font_size": 64,
   "text_color": [255, 255, 255],
+  "grain_intensity": 8,
   "bg_overlay_alpha": 0.80,
   "fade_in": 0.3,
+  "overlay_extras": [],
   "overlay": ["grain"],
   "transition_out": "crossfade"
 }
 ```
+
+Regra visual importante para `text_highlight`:
+- O highlight é um retângulo translúcido composto antes do texto.
+- A cor do texto permanece fixa em `text_color`.
 
 ---
 
@@ -264,6 +332,21 @@ Use para: citações, destaque de palavras-chave, momentos de impacto.
 | `vignette`  | Escurecimento suave nas bordas           |
 | `desaturate`| Redução parcial de saturação (vintage)   |
 | `bw`        | Preto e branco completo (grayscale)      |
+
+Campos auxiliares por cena:
+- `grain_intensity`: intensidade do grain quando `overlay` inclui `grain`.
+- `overlay_extras`: efeitos adicionais paramétricos.
+
+### `overlay_extras` (opcional)
+
+Formato geral:
+
+```json
+"overlay_extras": [
+  { "type": "particles", "count": 60, "color": [255, 255, 255], "speed": 0.8, "alpha": 0.5 },
+  { "type": "petals", "count": 24, "image": "assets/petal.png", "size_range": [20, 50], "speed": 0.5, "drift": 0.4, "alpha": 0.75, "rotate": true }
+]
+```
 
 ---
 
@@ -315,6 +398,17 @@ Use para: citações, destaque de palavras-chave, momentos de impacto.
         }
       ],
       "effect": "ken_burns_pan_right",
+      "grain_intensity": 8,
+      "tilt_y": true,
+      "tilt_y_degrees": 6,
+      "text": {
+        "content": "Planejamento, execução e consistência",
+        "position": "bottom_center",
+        "font_size": 56,
+        "color": [255, 255, 255],
+        "animate": "fade_slide_up",
+        "shadow": true
+      },
       "overlay": ["grain", "vignette"],
       "transition_out": "crossfade"
     }
