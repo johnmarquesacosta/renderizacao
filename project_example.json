@@ -1,108 +1,370 @@
 {
-  "title": "Demo — Motor de Renderização",
-  "audio": "audio.wav",
-  "fps": 30,
-  "resolution": [1920, 1080],
-  "output": "output.mp4",
-  "transitions": {
-    "default": "crossfade",
-    "duration": 0.5
-  },
-  "scenes": [
-
-    {
-      "id": 1,
-      "type": "typewriting",
-      "duration": 8.0,
-      "text": "Construindo o futuro com tecnologia",
-      "subtitle": "Uma história de inovação — 2025",
-      "images": ["images/scene_1.png"],
-      "show_center_image": true,
-      "typing_start": 0.6,
-      "chars_per_second": 13,
-      "fade_in": 0.4,
-      "bg_overlay_alpha": 0.72,
-      "bg_brightness": 0.35,
-      "accent_color": [99, 102, 241],
-      "text_color": [255, 255, 255],
-      "subtitle_color": [180, 180, 200],
-      "font_size": 56,
-      "subtitle_font_size": 32,
-      "overlay": ["grain"],
-      "transition_out": "crossfade",
-      "_comment": "Título do vídeo com efeito de digitação"
+    "title": "Oración de la Mañana: Entrega tu semana a Dios",
+    "audio": "audio.wav",
+    "fps": 30,
+    "resolution": [
+        1920,
+        1080
+    ],
+    "output": "output.mp4",
+    "transitions": {
+        "default": "crossfade",
+        "duration": 0.5
     },
-
-    {
-      "id": 2,
-      "type": "single",
-      "duration": 5.0,
-      "images": ["images/scene_2.png"],
-      "effect": "ken_burns_in",
-      "overlay": ["grain", "vignette"],
-      "transition_out": "crossfade"
-    },
-
-    {
-      "id": 3,
-      "type": "parallax",
-      "duration": 8.0,
-      "images": ["images/scene_3.png"],
-      "direction": "right",
-      "pan_range": 0.12,
-      "overlay": ["grain", "vignette"],
-      "transition_out": "crossfade",
-      "_comment": "Single-image: auto-split em 2 layers (bg blur + fg nítida)"
-    },
-
-    {
-      "id": 4,
-      "type": "parallax",
-      "duration": 9.0,
-      "direction": "left",
-      "pan_range": 0.10,
-      "layers": [
-        { "image": "images/scene_1.png", "speed": 0.25 },
-        { "image": "images/scene_2.png", "speed": 0.70, "alpha": 0.85 }
-      ],
-      "overlay": ["grain", "vignette"],
-      "transition_out": "crossfade",
-      "_comment": "Multi-layer: cada imagem é uma camada em velocidade diferente"
-    },
-
-    {
-      "id": 5,
-      "type": "mosaic",
-      "duration": 9.0,
-      "images": [
-        "images/scene_1.png",
-        "images/scene_2.png",
-        "images/scene_3.png"
-      ],
-      "appear_interval": 1.8,
-      "slide_duration": 0.42,
-      "effect": "ken_burns_random",
-      "overlay": ["grain"],
-      "bg_color": [12, 12, 12],
-      "transition_out": "crossfade"
-    },
-
-    {
-      "id": 6,
-      "type": "typewriting",
-      "duration": 6.0,
-      "text": "Obrigado por assistir",
-      "subtitle": "",
-      "typing_start": 0.8,
-      "chars_per_second": 10,
-      "fade_in": 0.5,
-      "bg_overlay_alpha": 0.80,
-      "accent_color": [239, 68, 68],
-      "font_size": 72,
-      "overlay": ["grain", "vignette"],
-      "transition_out": "crossfade",
-      "_comment": "Typewriting sem imagem de fundo — fundo preto puro"
-    }
-
-  ]
+    "scenes": [
+        {
+            "id": 1,
+            "type": "typewriting",
+            "duration": 16.0,
+            "text": "Oración de la Mañana",
+            "subtitle": "Entrega tu semana a Dios",
+            "layers": [
+                {
+                    "image": "images/scene_1.jpg",
+                    "image_prompt": "Beautiful sunrise over a calm misty ocean, warm golden hour light breaking through morning clouds, ethereal rays of light, cinematic, photorealistic, 8k",
+                    "video_prompt": "Slow and steady push in on the rising sun, gentle rolling waves"
+                }
+            ],
+            "show_center_image": true,
+            "typing_start": 0.5,
+            "chars_per_second": 12,
+            "fade_in": 0.5,
+            "bg_overlay_alpha": 0.65,
+            "bg_brightness": 0.40,
+            "accent_color": [
+                250,
+                204,
+                21
+            ],
+            "text_color": [
+                255,
+                255,
+                255
+            ],
+            "subtitle_color": [
+                200,
+                210,
+                230
+            ],
+            "font_size": 64,
+            "subtitle_font_size": 36,
+            "overlay": [
+                "grain"
+            ],
+            "transition_out": "crossfade"
+        },
+        {
+            "id": 2,
+            "type": "parallax",
+            "duration": 30.0,
+            "direction": "right",
+            "pan_range": 0.12,
+            "layers": [
+                {
+                    "image": "images/scene_2.jpg",
+                    "image_prompt": "Cozy bedroom interior with an open window, gentle morning sunlight illuminating a wooden nightstand with a cup of coffee, peaceful waking up atmosphere, cinematic lighting, photorealistic",
+                    "video_prompt": "Camera drifts slowly to the right across the room towards the bright window"
+                }
+            ],
+            "overlay": [
+                "grain",
+                "vignette"
+            ],
+            "transition_out": "crossfade"
+        },
+        {
+            "id": 3,
+            "type": "single",
+            "duration": 47.0,
+            "layers": [
+                {
+                    "image": "images/scene_3.jpg",
+                    "image_prompt": "Close up of an open antique Bible resting on a wooden desk, bathed in divine golden morning light, subtle dust motes floating in the sunbeam, photorealistic, cinematic macro photography",
+                    "video_prompt": "Extremely slow and smooth zoom in on the sacred pages, soft focus background"
+                }
+            ],
+            "effect": "ken_burns_in",
+            "overlay": [
+                "grain",
+                "vignette"
+            ],
+            "transition_out": "crossfade"
+        },
+        {
+            "id": 4,
+            "type": "flip_y",
+            "duration": 21.0,
+            "layers": [
+                {
+                    "image": "images/scene_4.jpg",
+                    "image_prompt": "Ancient war chariots and horses standing in a dusty, dimly lit battlefield, symbolizing worldly trust and human power, dramatic cinematic lighting",
+                    "video_prompt": ""
+                },
+                {
+                    "image": "images/scene_5.jpg",
+                    "image_prompt": "A glowing, ethereal wooden cross standing firmly on a peaceful mountaintop at dawn, surrounded by soft clouds and divine warm light, symbolizing spiritual victory",
+                    "video_prompt": ""
+                }
+            ],
+            "overlay": [
+                "grain"
+            ],
+            "transition_out": "crossfade"
+        },
+        {
+            "id": 5,
+            "type": "text_highlight",
+            "duration": 28.0,
+            "lines": [
+                {
+                    "text": "Sirvamos a Dios agradablemente,",
+                    "highlight": false
+                },
+                {
+                    "text": "con reverencia y piedad.",
+                    "highlight": true,
+                    "highlight_color": [
+                        250,
+                        204,
+                        21
+                    ]
+                }
+            ],
+            "layers": [
+                {
+                    "image": "images/scene_6.jpg",
+                    "image_prompt": "Abstract dark marble texture with subtle gold veins flowing through, elegant, minimal, deep shadows, cinematic",
+                    "video_prompt": ""
+                }
+            ],
+            "font_size": 58,
+            "text_color": [
+                255,
+                255,
+                255
+            ],
+            "bg_overlay_alpha": 0.85,
+            "fade_in": 0.4,
+            "overlay": [
+                "grain"
+            ],
+            "transition_out": "crossfade"
+        },
+        {
+            "id": 6,
+            "type": "single",
+            "duration": 45.0,
+            "layers": [
+                {
+                    "image": "images/scene_7.jpg",
+                    "image_prompt": "Silhouette of a person gently kneeling in prayer near a large window, beautiful early morning light rays streaming in, peaceful, spiritual, deep emotional resonance, cinematic",
+                    "video_prompt": "Slow upward tilt and subtle zoom out, revealing more of the glowing light from the window"
+                }
+            ],
+            "effect": "ken_burns_drift_up",
+            "overlay": [
+                "grain",
+                "vignette"
+            ],
+            "transition_out": "crossfade"
+        },
+        {
+            "id": 7,
+            "type": "mosaic",
+            "duration": 38.0,
+            "layers": [
+                {
+                    "image": "images/scene_8.jpg",
+                    "image_prompt": "A steaming cup of coffee next to a notebook on a rustic table, early morning light, inviting",
+                    "video_prompt": ""
+                },
+                {
+                    "image": "images/scene_9.jpg",
+                    "image_prompt": "A pair of hands holding a devotional journal, soft focus, personal reflection",
+                    "video_prompt": ""
+                },
+                {
+                    "image": "images/scene_10.jpg",
+                    "image_prompt": "A peaceful empty suburban street at dawn, trees casting long shadows, calm start to the day",
+                    "video_prompt": ""
+                }
+            ],
+            "appear_interval": 2.0,
+            "slide_duration": 0.5,
+            "effect": "ken_burns_random",
+            "overlay": [
+                "grain",
+                "bw"
+            ],
+            "transition_out": "crossfade"
+        },
+        {
+            "id": 8,
+            "type": "single",
+            "duration": 42.0,
+            "layers": [
+                {
+                    "image": "images/scene_11.jpg",
+                    "image_prompt": "Close up of diverse hands gently holding each other in a circle, warm natural lighting, representing a global community united in prayer, photorealistic, 8k",
+                    "video_prompt": "Slow pan left across the hands, keeping the focus soft and intimate"
+                }
+            ],
+            "effect": "ken_burns_pan_left",
+            "overlay": [
+                "grain",
+                "desaturate"
+            ],
+            "transition_out": "crossfade"
+        },
+        {
+            "id": 9,
+            "type": "parallax",
+            "duration": 47.0,
+            "direction": "up",
+            "pan_range": 0.10,
+            "layers": [
+                {
+                    "image": "images/scene_12.jpg",
+                    "image_prompt": "Beautiful modern family home exterior surrounded by lush green trees, golden morning sunlight hitting the roof, safe, peaceful, architectural photography, hyper-detailed",
+                    "video_prompt": "Slow tilt up from the garden towards the house and the bright morning sky"
+                }
+            ],
+            "overlay": [
+                "grain",
+                "vignette"
+            ],
+            "transition_out": "crossfade"
+        },
+        {
+            "id": 10,
+            "type": "text_highlight",
+            "duration": 19.0,
+            "lines": [
+                {
+                    "text": "Padre nuestro que estás en los cielos,",
+                    "highlight": false
+                },
+                {
+                    "text": "santificado sea tu nombre.",
+                    "highlight": true,
+                    "highlight_color": [
+                        255,
+                        223,
+                        0
+                    ]
+                }
+            ],
+            "layers": [
+                {
+                    "image": "images/scene_13.jpg",
+                    "image_prompt": "Soft glowing clouds in a pastel morning sky, ethereal and heavenly, light blue and gold hues, serene background",
+                    "video_prompt": ""
+                }
+            ],
+            "font_size": 60,
+            "text_color": [
+                255,
+                255,
+                255
+            ],
+            "bg_overlay_alpha": 0.70,
+            "fade_in": 0.3,
+            "overlay": [
+                "grain"
+            ],
+            "transition_out": "crossfade"
+        },
+        {
+            "id": 11,
+            "type": "single",
+            "duration": 37.0,
+            "layers": [
+                {
+                    "image": "images/scene_14.jpg",
+                    "image_prompt": "Over the shoulder close-up of a person typing an 'Amen' comment on a glowing smartphone screen, soft bokeh background of a cozy living room, warm morning light, photorealistic",
+                    "video_prompt": "Slow zoom out from the phone screen revealing the comfortable room"
+                }
+            ],
+            "effect": "ken_burns_out",
+            "overlay": [
+                "grain"
+            ],
+            "transition_out": "crossfade"
+        },
+        {
+            "id": 12,
+            "type": "mosaic",
+            "duration": 45.0,
+            "layers": [
+                {
+                    "image": "images/scene_15.jpg",
+                    "image_prompt": "A smiling elderly woman looking peaceful and grateful, soft natural light",
+                    "video_prompt": ""
+                },
+                {
+                    "image": "images/scene_16.jpg",
+                    "image_prompt": "A young man reading a book outdoors in a park, serene expression",
+                    "video_prompt": ""
+                },
+                {
+                    "image": "images/scene_17.jpg",
+                    "image_prompt": "A mother gently hugging her young child, warm and loving atmosphere",
+                    "video_prompt": ""
+                },
+                {
+                    "image": "images/scene_18.jpg",
+                    "image_prompt": "A pair of hands resting on a wooden table, gently folded in gratitude",
+                    "video_prompt": ""
+                }
+            ],
+            "appear_interval": 2.5,
+            "slide_duration": 0.6,
+            "effect": "ken_burns_random",
+            "overlay": [
+                "grain"
+            ],
+            "transition_out": "crossfade"
+        },
+        {
+            "id": 13,
+            "type": "typewriting",
+            "duration": 35.0,
+            "text": "Nada me vence cuando Dios me sostiene.",
+            "subtitle": "Amén. Ten una semana bendecida.",
+            "layers": [
+                {
+                    "image": "images/scene_19.jpg",
+                    "image_prompt": "Majestic eagle soaring above a grand mountain peak at sunrise, symbolic of strength, freedom, and divine support, cinematic wide shot, breathtaking landscape, 8k",
+                    "video_prompt": "Slow majestic tracking shot following the eagle's flight over the mountains"
+                }
+            ],
+            "show_center_image": true,
+            "typing_start": 1.0,
+            "chars_per_second": 10,
+            "fade_in": 0.6,
+            "bg_overlay_alpha": 0.60,
+            "bg_brightness": 0.35,
+            "accent_color": [
+                56,
+                189,
+                248
+            ],
+            "text_color": [
+                255,
+                255,
+                255
+            ],
+            "subtitle_color": [
+                220,
+                220,
+                220
+            ],
+            "font_size": 56,
+            "subtitle_font_size": 32,
+            "overlay": [
+                "grain"
+            ],
+            "transition_out": "crossfade"
+        }
+    ]
 }
