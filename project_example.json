@@ -1,5 +1,5 @@
 {
-  "title": "Meu Vídeo — POC",
+  "title": "Demo — Motor de Renderização",
   "audio": "audio.wav",
   "fps": 30,
   "resolution": [1920, 1080],
@@ -8,45 +8,78 @@
     "default": "crossfade",
     "duration": 0.5
   },
-
-  "_comentarios": {
-    "types": "single | mosaic",
-    "effects": "ken_burns_in | ken_burns_out | ken_burns_pan_left | ken_burns_pan_right | ken_burns_up | ken_burns_down | ken_burns_drift_in | ken_burns_drift_out | ken_burns_random",
-    "overlays": "grain | vignette | desaturate  (lista, pode combinar)"
-  },
-
   "scenes": [
 
     {
       "id": 1,
+      "type": "typewriting",
+      "duration": 8.0,
+      "text": "Construindo o futuro com tecnologia",
+      "subtitle": "Uma história de inovação — 2025",
+      "images": ["images/scene_1.png"],
+      "show_center_image": true,
+      "typing_start": 0.6,
+      "chars_per_second": 13,
+      "fade_in": 0.4,
+      "bg_overlay_alpha": 0.72,
+      "bg_brightness": 0.35,
+      "accent_color": [99, 102, 241],
+      "text_color": [255, 255, 255],
+      "subtitle_color": [180, 180, 200],
+      "font_size": 56,
+      "subtitle_font_size": 32,
+      "overlay": ["grain"],
+      "transition_out": "crossfade",
+      "_comment": "Título do vídeo com efeito de digitação"
+    },
+
+    {
+      "id": 2,
       "type": "single",
       "duration": 5.0,
-      "images": ["images/scene_1.jpeg"],
+      "images": ["images/scene_2.png"],
       "effect": "ken_burns_in",
       "overlay": ["grain", "vignette"],
       "transition_out": "crossfade"
     },
 
     {
-      "id": 2,
-      "type": "single",
-      "duration": 4.5,
-      "images": ["images/scene_2.jpeg"],
-      "effect": "ken_burns_pan_right",
-      "overlay": ["grain", "vignette", "desaturate"],
-      "transition_out": "crossfade"
+      "id": 3,
+      "type": "parallax",
+      "duration": 8.0,
+      "images": ["images/scene_3.png"],
+      "direction": "right",
+      "pan_range": 0.12,
+      "overlay": ["grain", "vignette"],
+      "transition_out": "crossfade",
+      "_comment": "Single-image: auto-split em 2 layers (bg blur + fg nítida)"
     },
 
     {
-      "id": 3,
-      "type": "mosaic",
-      "duration": 8.0,
-      "images": [
-        "images/scene_3.jpeg",
-        "images/scene_4.jpeg",
-        "images/scene_5.jpeg"
+      "id": 4,
+      "type": "parallax",
+      "duration": 9.0,
+      "direction": "left",
+      "pan_range": 0.10,
+      "layers": [
+        { "image": "images/scene_1.png", "speed": 0.25 },
+        { "image": "images/scene_2.png", "speed": 0.70, "alpha": 0.85 }
       ],
-      "appear_interval": 1.5,
+      "overlay": ["grain", "vignette"],
+      "transition_out": "crossfade",
+      "_comment": "Multi-layer: cada imagem é uma camada em velocidade diferente"
+    },
+
+    {
+      "id": 5,
+      "type": "mosaic",
+      "duration": 9.0,
+      "images": [
+        "images/scene_1.png",
+        "images/scene_2.png",
+        "images/scene_3.png"
+      ],
+      "appear_interval": 1.8,
       "slide_duration": 0.42,
       "effect": "ken_burns_random",
       "overlay": ["grain"],
@@ -55,41 +88,20 @@
     },
 
     {
-      "id": 4,
-      "type": "single",
-      "duration": 4.0,
-      "images": ["images/scene_6.jpeg"],
-      "effect": "ken_burns_out",
-      "overlay": ["grain", "vignette"],
-      "transition_out": "crossfade"
-    },
-
-    {
-      "id": 5,
-      "type": "mosaic",
-      "duration": 10.0,
-      "images": [
-        "images/scene_7.jpeg",
-        "images/scene_8.jpeg",
-        "images/scene_9.jpeg",
-        "images/scene_10.jpeg"
-      ],
-      "appear_interval": 1.8,
-      "slide_duration": 0.4,
-      "effect": "ken_burns_in",
-      "overlay": ["grain"],
-      "bg_color": [8, 8, 8],
-      "transition_out": "crossfade"
-    },
-
-    {
       "id": 6,
-      "type": "single",
-      "duration": 5.5,
-      "images": ["images/scene_11.jpeg"],
-      "effect": "ken_burns_drift_in",
+      "type": "typewriting",
+      "duration": 6.0,
+      "text": "Obrigado por assistir",
+      "subtitle": "",
+      "typing_start": 0.8,
+      "chars_per_second": 10,
+      "fade_in": 0.5,
+      "bg_overlay_alpha": 0.80,
+      "accent_color": [239, 68, 68],
+      "font_size": 72,
       "overlay": ["grain", "vignette"],
-      "transition_out": "crossfade"
+      "transition_out": "crossfade",
+      "_comment": "Typewriting sem imagem de fundo — fundo preto puro"
     }
 
   ]
