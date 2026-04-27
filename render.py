@@ -21,6 +21,7 @@ import importlib
 import platform
 import shutil
 import subprocess
+import tempfile
 
 # ── MoviePy: suporta 1.x e 2.x ───────────────────────────────────────────────
 try:
@@ -66,10 +67,78 @@ def detect_hw_encoder() -> tuple[str, list[str]]:
 
     if platform.system() == "Darwin" and "h264_videotoolbox" in encoders:
         print("🟢 Apple VideoToolbox — h264_videotoolbox")
-        return "h264_videotoolbox", ["-allow_sw", "1", "-q:v", "65"]
+        return "h264_videotoolbox", ["-allow_sw", "0", "-q:v", "65"]
 
     print("ℹ Encoder de hardware não encontrado — usando libx264")
     return "libx264", []
+
+
+def _sanitize_encoder_params(codec: str, params: list[str]) -> list[str]:
+    """
+    Garante que parâmetros enviados ao ffmpeg sejam compatíveis com o codec.
+    Evita passar flags NVENC para VideoToolbox/libx264, causando falha de pipe.
+    """
+    if not isinstance(params, list):
+        return []
+
+    if codec == "h264_nvenc":
+        return params
+
+    # Remove pares de opções típicos do NVENC para outros codecs.
+    blocked = {"-rc", "-cq", "-tune", "-gpu", "-preset", "-b:v"}
+    sanitized: list[str] = []
+    i = 0
+    while i < len(params):
+        token = params[i]
+        if token in blocked:
+            i += 2
+            continue
+        sanitized.append(token)
+        i += 1
+
+    return sanitized
+
+
+def _ffmpeg_accepts_encoder(codec: str, params: list[str]) -> tuple[bool, str]:
+    """
+    Faz smoke test rápido do encoder/params no ffmpeg para evitar falha tardia.
+    """
+    if shutil.which("ffmpeg") is None:
+        return False, "ffmpeg não encontrado"
+
+    with tempfile.NamedTemporaryFile(suffix=".mp4", delete=False) as tmp:
+        tmp_out = tmp.name
+
+    try:
+        cmd = [
+            "ffmpeg",
+            "-hide_banner",
+            "-loglevel",
+            "error",
+            "-y",
+            "-f",
+            "lavfi",
+            "-i",
+            "color=c=black:s=64x64:r=1:d=0.2",
+            "-c:v",
+            codec,
+            *params,
+            "-f",
+            "mp4",
+            tmp_out,
+        ]
+        res = subprocess.run(cmd, capture_output=True, text=True, timeout=10, check=False)
+        if res.returncode == 0:
+            return True, ""
+        err = (res.stderr or res.stdout or "erro desconhecido").strip()
+        return False, err
+    except Exception as exc:
+        return False, str(exc)
+    finally:
+        try:
+            os.remove(tmp_out)
+        except OSError:
+            pass
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -115,6 +184,12 @@ def render(project_path: str) -> None:
     output   = proj.get("output", "output.mp4")
     configured_codec = proj.get("encoder")
     configured_params = proj.get("encoder_params")
+    encode_threads = int(
+        proj.get(
+            "encode_threads",
+            max(1, (os.cpu_count() or 4) - 1),
+        )
+    )
     scenes   = proj["scenes"]
     tc       = proj.get("transitions", {})
     def_trans = tc.get("default", "crossfade")
@@ -157,21 +232,45 @@ def render(project_path: str) -> None:
     else:
         codec, ffmpeg_params = detect_hw_encoder()
 
+    ffmpeg_params = _sanitize_encoder_params(codec, ffmpeg_params)
+
+    ok, reason = _ffmpeg_accepts_encoder(codec, ffmpeg_params)
+    if not ok:
+        print(f"⚠ Encoder '{codec}' inválido com params atuais: {reason}")
+
+        # Tenta auto-detecção antes de cair para software.
+        auto_codec, auto_params = detect_hw_encoder()
+        auto_params = _sanitize_encoder_params(auto_codec, auto_params)
+        auto_ok, auto_reason = _ffmpeg_accepts_encoder(auto_codec, auto_params)
+
+        if auto_ok:
+            codec = auto_codec
+            ffmpeg_params = auto_params
+            print(f"✅ Recuperado com auto-detecção: {codec}")
+        else:
+            print(f"⚠ Auto-detecção também falhou: {auto_reason}")
+            print("ℹ Fallback para libx264 (software)")
+            codec = "libx264"
+            ffmpeg_params = []
+
     # ── Escrita do arquivo ────────────────────────────────────────────────────
     print(f"💾  Escrevendo → {output}")
     write_kwargs = {
         "fps": fps,
         "codec": codec,
         "audio_codec": "aac",
-        "threads": 4,
+        "threads": max(1, encode_threads),
         "logger": "bar",
     }
 
     if codec == "libx264":
-        write_kwargs["preset"] = "medium"
+        write_kwargs["preset"] = proj.get("x264_preset", "veryfast")
 
     if ffmpeg_params:
         write_kwargs["ffmpeg_params"] = ffmpeg_params
+
+    print(f"⚙️  Encode: codec={codec} | threads={write_kwargs['threads']}")
+    print("ℹ Composição de frames (efeitos Python/PIL) no MoviePy tende a ser majoritariamente single-thread.")
 
     final.write_videofile(output, **write_kwargs)
     print(f"\n✅  Concluído! → {output}\n")

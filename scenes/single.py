@@ -20,6 +20,7 @@ from effects.ken_burns import kb_frame, resolve_kb
 from effects.overlay_extras import apply_overlay_extras
 from effects.overlays import apply_fx
 from utils.image import get_layer_images, load_image
+from utils.text import load_font
 
 try:
     import cv2
@@ -43,10 +44,8 @@ def _get_font(font_path: str | None, size: int) -> ImageFont.ImageFont:
         except Exception:
             pass
 
-    try:
-        font = ImageFont.truetype("arial.ttf", size)
-    except Exception:
-        font = ImageFont.load_default()
+    # Usa fallback cross-platform do projeto para manter tamanho legível.
+    font = load_font(size=size, bold=True)
 
     _FONT_CACHE[key] = font
     return font

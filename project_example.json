@@ -4,8 +4,10 @@
   "fps": 30,
   "resolution": [1920, 1080],
   "output": "output.mp4",
-  "encoder": "h264_nvenc",
-  "encoder_params": ["-rc", "vbr", "-cq", "23", "-preset", "p4", "-tune", "hq"],
+  "encoder": "h264_videotoolbox",
+  "encoder_params": ["-allow_sw", "0", "-q:v", "65"],
+  "encode_threads": 10,
+  "x264_preset": "veryfast",
   "transitions": {
     "default": "crossfade",
     "duration": 0.5
@@ -19,7 +21,7 @@
       "subtitle": "Con el Misionero John Marques",
       "layers": [
         {
-          "image": "images/cena_1_0.png",
+          "image": "images/cena_1_0.jpeg",
           "image_prompt": "Cinematic wide shot of a peaceful sunrise over a calm valley, golden rays of sun piercing through morning mist, ethereal atmosphere, 8k, highly detailed",
           "video_prompt": "Slow camera pan upwards towards the sun"
         }
@@ -35,9 +37,7 @@
       "subtitle_color": [180, 180, 200],
       "font_size": 56,
       "subtitle_font_size": 32,
-      "overlay": [
-        "grain"
-      ],
+      "overlay": ["grain"],
       "transition_out": "crossfade"
     },
     {
@@ -46,7 +46,7 @@
       "duration": 11.2,
       "layers": [
         {
-          "image": "images/cena_2_0.png",
+          "image": "images/cena_2_0.jpeg",
           "image_prompt": "Close-up of a middle-aged man with a kind expression, hands folded in prayer, soft natural morning light from a window, cinematic color grading, photorealistic",
           "video_prompt": "Subtle zoom in on the man's hands"
         }
@@ -72,10 +72,7 @@
           "padding": [4, 10]
         }
       },
-      "overlay": [
-        "grain",
-        "vignette"
-      ],
+      "overlay": ["grain", "vignette"],
       "transition_out": "crossfade"
     },
     {
@@ -86,14 +83,12 @@
       "pan_range": 0.15,
       "layers": [
         {
-          "image": "images/cena_3_0.png",
+          "image": "images/cena_3_0.jpeg",
           "image_prompt": "Vast landscape of mountains at dawn, purple and orange sky, layers of depth, cinematic lighting, 8k resolution",
           "video_prompt": "Camera drifts slowly to the right showing depth between mountain layers"
         }
       ],
-      "overlay": [
-        "grain"
-      ],
+      "overlay": ["grain"],
       "transition_out": "crossfade"
     },
     {
@@ -102,7 +97,7 @@
       "duration": 12.46,
       "layers": [
         {
-          "image": "images/cena_4_0.png",
+          "image": "images/cena_4_0.jpeg",
           "image_prompt": "POV shot of someone opening their eyes in a bright room, soft white curtains blowing in a gentle breeze, warm morning glow, peaceful and serene",
           "video_prompt": "Slow blur to sharp focus transition as if waking up"
         }
@@ -128,9 +123,7 @@
           "padding": [4, 10]
         }
       },
-      "overlay": [
-        "vignette"
-      ],
+      "overlay": ["vignette"],
       "transition_out": "crossfade"
     },
     {
@@ -150,7 +143,7 @@
       ],
       "layers": [
         {
-          "image": "images/cena_5_0.png",
+          "image": "images/cena_5_0.jpeg",
           "image_prompt": "Abstract light rays moving through dust particles in a dark room, divine light, spiritual atmosphere, cinematic",
           "video_prompt": ""
         }
@@ -169,7 +162,7 @@
       "duration": 12.0,
       "layers": [
         {
-          "image": "images/cena_6_0.png",
+          "image": "images/cena_6_0.jpeg",
           "image_prompt": "Cinematic shot of an open Bible on a wooden table, a single beam of light illuminating the pages, particles in the air, 8k, sharp details",
           "video_prompt": "Slow zoom in on the Bible text"
         }
@@ -195,10 +188,7 @@
           "padding": [4, 10]
         }
       },
-      "overlay": [
-        "grain",
-        "vignette"
-      ],
+      "overlay": ["grain", "vignette"],
       "transition_out": "crossfade"
     },
     {
@@ -207,17 +197,17 @@
       "duration": 15.0,
       "layers": [
         {
-          "image": "images/cena_7_0.png",
+          "image": "images/cena_7_0.jpeg",
           "image_prompt": "Ancient stone temple in Zion, dramatic sky, cinematic perspective",
           "video_prompt": ""
         },
         {
-          "image": "images/cena_7_1.png",
+          "image": "images/cena_7_1.jpeg",
           "image_prompt": "Helping hands reaching out in a sanctuary, warm light, soft focus",
           "video_prompt": ""
         },
         {
-          "image": "images/cena_7_2.png",
+          "image": "images/cena_7_2.jpeg",
           "image_prompt": "A peaceful altar with candles burning, religious atmosphere",
           "video_prompt": ""
         }
@@ -227,10 +217,7 @@
       "effect": "ken_burns_random",
       "grain_intensity": 8,
       "grid_speed": 12,
-      "overlay": [
-        "bw",
-        "grain"
-      ],
+      "overlay": ["bw", "grain"],
       "transition_out": "crossfade"
     },
     {
@@ -239,7 +226,7 @@
       "duration": 16.0,
       "layers": [
         {
-          "image": "images/cena_8_0.png",
+          "image": "images/cena_8_0.jpeg",
           "image_prompt": "Group of people in white robes raising golden banners towards a bright sky, celebration of victory, cinematic epic style",
           "video_prompt": "Slow motion of banners waving in the wind"
         }
@@ -265,9 +252,7 @@
           "padding": [4, 10]
         }
       },
-      "overlay": [
-        "grain"
-      ],
+      "overlay": ["grain"],
       "transition_out": "crossfade"
     },
     {
@@ -276,20 +261,17 @@
       "duration": 14.0,
       "layers": [
         {
-          "image": "images/cena_9_0.png",
+          "image": "images/cena_9_0.jpeg",
           "image_prompt": "LADO A: Ancient war chariots and horses in a dusty battlefield, human military power, dark tones",
           "video_prompt": ""
         },
         {
-          "image": "images/cena_9_1.png",
+          "image": "images/cena_9_1.jpeg",
           "image_prompt": "LADO B: A person standing alone on a rock, looking up at a brilliant light, spiritual trust, golden and white tones",
           "video_prompt": ""
         }
       ],
-      "overlay": [
-        "grain",
-        "vignette"
-      ],
+      "overlay": ["grain", "vignette"],
       "transition_out": "crossfade"
     },
     {
@@ -300,7 +282,7 @@
       "subtitle": "Y estamos en pie",
       "layers": [
         {
-          "image": "images/cena_10_0.png",
+          "image": "images/cena_10_0.jpeg",
           "image_prompt": "Silhouette of a person standing on a mountain peak against a blue morning sky, triumphant pose, cinematic wide shot",
           "video_prompt": ""
         }
@@ -316,9 +298,7 @@
       "subtitle_color": [180, 180, 200],
       "font_size": 56,
       "subtitle_font_size": 32,
-      "overlay": [
-        "grain"
-      ],
+      "overlay": ["grain"],
       "transition_out": "crossfade"
     },
     {
@@ -327,7 +307,7 @@
       "duration": 15.0,
       "layers": [
         {
-          "image": "images/cena_11_0.png",
+          "image": "images/cena_11_0.jpeg",
           "image_prompt": "Cinematic representation of a 'Kingdom that cannot be moved', glowing ethereal architecture floating in the clouds, divine light, surreal and beautiful",
           "video_prompt": "Very slow zoom out to reveal scale"
         }
@@ -353,9 +333,7 @@
           "padding": [4, 10]
         }
       },
-      "overlay": [
-        "grain"
-      ],
+      "overlay": ["grain"],
       "transition_out": "crossfade"
     },
     {
@@ -366,14 +344,12 @@
       "pan_range": 0.12,
       "layers": [
         {
-          "image": "images/cena_12_0.png",
+          "image": "images/cena_12_0.jpeg",
           "image_prompt": "Low angle shot of a person kneeling in a vast, empty stone cathedral, light streaming from high windows, reverence and piedad",
           "video_prompt": "Camera tilts up towards the light"
         }
       ],
-      "overlay": [
-        "vignette"
-      ],
+      "overlay": ["vignette"],
       "transition_out": "crossfade"
     },
     {
@@ -393,7 +369,7 @@
       ],
       "layers": [
         {
-          "image": "images/cena_13_0.png",
+          "image": "images/cena_13_0.jpeg",
           "image_prompt": "Close-up of hands releasing white flower petals into the wind, metaphorical delivery, soft bokeh background",
           "video_prompt": ""
         }
@@ -412,7 +388,7 @@
       "duration": 16.0,
       "layers": [
         {
-          "image": "images/cena_14_0.png",
+          "image": "images/cena_14_0.jpeg",
           "image_prompt": "Missionary praying in a humble room, morning light, calm expression, cinematic lighting, shallow depth of field",
           "video_prompt": "Subtle camera drift to the left"
         }
@@ -438,9 +414,7 @@
           "padding": [4, 10]
         }
       },
-      "overlay": [
-        "grain"
-      ],
+      "overlay": ["grain"],
       "transition_out": "crossfade"
     },
     {
@@ -449,19 +423,17 @@
       "duration": 13.0,
       "layers": [
         {
-          "image": "images/cena_15_0.png",
+          "image": "images/cena_15_0.jpeg",
           "image_prompt": "A heart made of heavy gray stone, dark background, representing burden",
           "video_prompt": ""
         },
         {
-          "image": "images/cena_15_1.png",
+          "image": "images/cena_15_1.jpeg",
           "image_prompt": "A heart made of glowing crystal and light, clean and renewed, representing grace",
           "video_prompt": ""
         }
       ],
-      "overlay": [
-        "grain"
-      ],
+      "overlay": ["grain"],
       "transition_out": "crossfade"
     },
     {
@@ -470,17 +442,17 @@
       "duration": 18.0,
       "layers": [
         {
-          "image": "images/cena_16_0.png",
+          "image": "images/cena_16_0.jpeg",
           "image_prompt": "A warm loaf of bread on a wooden table, daily bread, homey atmosphere",
           "video_prompt": ""
         },
         {
-          "image": "images/cena_16_1.png",
+          "image": "images/cena_16_1.jpeg",
           "image_prompt": "A family sharing a meal, laughter, soft warm lighting",
           "video_prompt": ""
         },
         {
-          "image": "images/cena_16_2.png",
+          "image": "images/cena_16_2.jpeg",
           "image_prompt": "Protective hands covering a small house, metaphorical care",
           "video_prompt": ""
         }
@@ -490,9 +462,7 @@
       "effect": "ken_burns_random",
       "grain_intensity": 8,
       "grid_speed": 12,
-      "overlay": [
-        "desaturate"
-      ],
+      "overlay": ["desaturate"],
       "transition_out": "crossfade"
     },
     {
@@ -501,7 +471,7 @@
       "duration": 15.0,
       "layers": [
         {
-          "image": "images/cena_17_0.png",
+          "image": "images/cena_17_0.jpeg",
           "image_prompt": "Close-up of a person smiling with eyes closed, morning sun on their face, pure joy and peace, cinematic portrait",
           "video_prompt": "Slow zoom in on the smile"
         }
@@ -527,10 +497,7 @@
           "padding": [4, 10]
         }
       },
-      "overlay": [
-        "grain",
-        "vignette"
-      ],
+      "overlay": ["grain", "vignette"],
       "transition_out": "crossfade"
     },
     {
@@ -539,7 +506,7 @@
       "duration": 14.5,
       "layers": [
         {
-          "image": "images/cena_18_0.png",
+          "image": "images/cena_18_0.jpeg",
           "image_prompt": "Cinematic shot of a laptop screen and tablet showing a YouTube channel with religious content, people commenting 'Amen', modern community of faith",
           "video_prompt": "Slow pan across the screen showing comments"
         }
@@ -565,9 +532,7 @@
           "padding": [4, 10]
         }
       },
-      "overlay": [
-        "grain"
-      ],
+      "overlay": ["grain"],
       "transition_out": "crossfade"
     },
     {
@@ -576,7 +541,7 @@
       "duration": 14.0,
       "layers": [
         {
-          "image": "images/cena_19_0.png",
+          "image": "images/cena_19_0.jpeg",
           "image_prompt": "A person in a hospital bed looking at a television screen with a prayer program, a sense of hope and peace, soft lighting",
           "video_prompt": "Slow zoom out to show the hospital room environment"
         }
@@ -602,9 +567,7 @@
           "padding": [4, 10]
         }
       },
-      "overlay": [
-        "desaturate"
-      ],
+      "overlay": ["desaturate"],
       "transition_out": "crossfade"
     },
     {
@@ -615,15 +578,12 @@
       "pan_range": 0.18,
       "layers": [
         {
-          "image": "images/cena_20_0.png",
+          "image": "images/cena_20_0.jpeg",
           "image_prompt": "A dark city street at night, a glowing protective aura around a person walking safely, divine protection, cinematic contrast",
           "video_prompt": ""
         }
       ],
-      "overlay": [
-        "grain",
-        "vignette"
-      ],
+      "overlay": ["grain", "vignette"],
       "transition_out": "crossfade"
     },
     {
@@ -632,17 +592,17 @@
       "duration": 18.0,
       "layers": [
         {
-          "image": "images/cena_21_0.png",
+          "image": "images/cena_21_0.jpeg",
           "image_prompt": "Children playing in a garden, sunlight, innocence",
           "video_prompt": ""
         },
         {
-          "image": "images/cena_21_1.png",
+          "image": "images/cena_21_1.jpeg",
           "image_prompt": "Grandparents hugging grandchildren, love and legacy",
           "video_prompt": ""
         },
         {
-          "image": "images/cena_21_2.png",
+          "image": "images/cena_21_2.jpeg",
           "image_prompt": "A peaceful home interior, lit by the fireplace, safety",
           "video_prompt": ""
         }
@@ -652,9 +612,7 @@
       "effect": "ken_burns_random",
       "grain_intensity": 8,
       "grid_speed": 12,
-      "overlay": [
-        "grain"
-      ],
+      "overlay": ["grain"],
       "transition_out": "crossfade"
     },
     {
@@ -665,7 +623,7 @@
       "subtitle": "Hágase tu voluntad",
       "layers": [
         {
-          "image": "images/cena_22_0.png",
+          "image": "images/cena_22_0.jpeg",
           "image_prompt": "Golden clouds in a heavenly sky, light breaking through in a cross shape, spiritual and majestic",
           "video_prompt": "Slow motion of clouds moving"
         }
@@ -681,9 +639,7 @@
       "subtitle_color": [180, 180, 200],
       "font_size": 56,
       "subtitle_font_size": 32,
-      "overlay": [
-        "grain"
-      ],
+      "overlay": ["grain"],
       "transition_out": "crossfade"
     },
     {
@@ -692,7 +648,7 @@
       "duration": 15.0,
       "layers": [
         {
-          "image": "images/cena_23_0.png",
+          "image": "images/cena_23_0.jpeg",
           "image_prompt": "Missionary inviting the audience to subscribe, pointing to a 'Suscríbete' button overlay, friendly and warm office setting",
           "video_prompt": "Friendly gesture towards the camera"
         }
@@ -718,9 +674,7 @@
           "padding": [4, 10]
         }
       },
-      "overlay": [
-        "grain"
-      ],
+      "overlay": ["grain"],
       "transition_out": "crossfade"
     },
     {
@@ -740,7 +694,7 @@
       ],
       "layers": [
         {
-          "image": "images/cena_24_0.png",
+          "image": "images/cena_24_0.jpeg",
           "image_prompt": "Split screen: left side morning coffee and bible, right side a candle burning at night, consistency in prayer",
           "video_prompt": ""
         }
@@ -759,7 +713,7 @@
       "duration": 18.0,
       "layers": [
         {
-          "image": "images/cena_25_0.png",
+          "image": "images/cena_25_0.jpeg",
           "image_prompt": "Extreme close up of eyes looking upwards with hope, reflection of a bright light in the pupils, emotional spiritual connection",
           "video_prompt": "Subtle focus shift from skin to the reflection in the eye"
         }
@@ -785,10 +739,7 @@
           "padding": [4, 10]
         }
       },
-      "overlay": [
-        "grain",
-        "vignette"
-      ],
+      "overlay": ["grain", "vignette"],
       "transition_out": "crossfade"
     },
     {
@@ -797,7 +748,7 @@
       "duration": 16.0,
       "layers": [
         {
-          "image": "images/cena_26_0.png",
+          "image": "images/cena_26_0.jpeg",
           "image_prompt": "Cinematic shot of a smartphone on a table with a WhatsApp sharing icon glowing, 'Comparte esta oración', soft morning background",
           "video_prompt": "Slow slide pan across the table"
         }
@@ -823,9 +774,7 @@
           "padding": [4, 10]
         }
       },
-      "overlay": [
-        "grain"
-      ],
+      "overlay": ["grain"],
       "transition_out": "crossfade"
     },
     {
@@ -836,7 +785,7 @@
       "subtitle": "Nunca lo olvides",
       "layers": [
         {
-          "image": "images/cena_27_0.png",
+          "image": "images/cena_27_0.jpeg",
           "image_prompt": "A single beautiful flower growing through a crack in a stone wall, uniqueness and strength, bathed in a warm spotlight",
           "video_prompt": ""
         }
@@ -852,9 +801,7 @@
       "subtitle_color": [180, 180, 200],
       "font_size": 56,
       "subtitle_font_size": 32,
-      "overlay": [
-        "grain"
-      ],
+      "overlay": ["grain"],
       "transition_out": "crossfade"
     },
     {
@@ -863,7 +810,7 @@
       "duration": 10.0,
       "layers": [
         {
-          "image": "images/cena_28_0.png",
+          "image": "images/cena_28_0.jpeg",
           "image_prompt": "Missionary John Marques waving goodbye with a warm smile, fading into a white screen with a logo, peaceful end",
           "video_prompt": "Slow fade to white"
         }
@@ -889,9 +836,7 @@
           "padding": [4, 10]
         }
       },
-      "overlay": [
-        "vignette"
-      ],
+      "overlay": ["vignette"],
       "transition_out": "crossfade"
     }
   ]
