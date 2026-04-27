@@ -5,6 +5,7 @@ Cena 'text_highlight': texto com marca-texto animado.
 import numpy as np
 from PIL import Image, ImageDraw
 
+from effects.overlay_extras import apply_overlay_extras
 from effects.overlays import apply_fx
 from utils.image import get_layer_images
 from utils.text import load_font, text_line_height
@@ -29,7 +30,6 @@ def scene_text_highlight(scene: dict, W: int, H: int, fps: int):
     lines_cfg = scene["lines"]
     font_size = int(scene.get("font_size", 64))
     text_color = tuple(scene.get("text_color", [255, 255, 255]))
-    on_hl_color = tuple(scene.get("text_on_highlight_color", [20, 20, 20]))
     hl_alpha = float(scene.get("highlight_alpha", 0.55))
     hl_dur = float(scene.get("highlight_duration", 0.6))
     start_delay = float(scene.get("start_delay", 0.8))
@@ -37,6 +37,8 @@ def scene_text_highlight(scene: dict, W: int, H: int, fps: int):
     bg_alpha = float(scene.get("bg_overlay_alpha", 0.75))
     fade_in = float(scene.get("fade_in", 0.3))
     overlays = scene.get("overlay", ["grain"])
+    grain_intensity = int(scene.get("grain_intensity", 8))
+    overlay_extras = scene.get("overlay_extras", [])
 
     font = load_font(font_size, bold=True)
     lh = text_line_height(font) + 12
@@ -75,7 +77,10 @@ def scene_text_highlight(scene: dict, W: int, H: int, fps: int):
         overlay_layer = Image.new("RGBA", (W, H), (0, 0, 0, int(bg_alpha * 255)))
         pil = Image.alpha_composite(pil, overlay_layer).convert("RGB")
 
-        draw = ImageDraw.Draw(pil, "RGBA")
+        hl_layer = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+        text_layer = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+        draw_hl = ImageDraw.Draw(hl_layer, "RGBA")
+        draw_text = ImageDraw.Draw(text_layer, "RGBA")
 
         for i, cfg in enumerate(lines_cfg):
             text = cfg["text"]
@@ -106,15 +111,27 @@ def scene_text_highlight(scene: dict, W: int, H: int, fps: int):
                         x_text - pad + sweep_w + pad * 2,
                         y + lh - pad // 2,
                     ]
-                    draw.rectangle(rect, fill=(*hl_color, int(hl_alpha * 255)))
-                    draw.text((x_text, y), text, font=font, fill=(*on_hl_color, 255))
+                    draw_hl.rectangle(rect, fill=(*hl_color, int(hl_alpha * 255)))
+                    draw_text.text((x_text, y), text, font=font, fill=(*text_color, 255))
                 else:
-                    draw.text((x_text, y), text, font=font, fill=(*text_color, 255))
+                    draw_text.text((x_text, y), text, font=font, fill=(*text_color, 255))
             else:
-                draw.text((x_text, y), text, font=font, fill=(*text_color, 255))
+                draw_text.text((x_text, y), text, font=font, fill=(*text_color, 255))
 
+        pil = Image.alpha_composite(pil.convert("RGBA"), hl_layer)
+        pil = Image.alpha_composite(pil, text_layer)
         frame = np.array(pil.convert("RGB"))
-        frame = apply_fx(frame, t, fps, W, H, overlays)
+        frame = apply_fx(frame, t, fps, W, H, overlays, grain_intensity=grain_intensity)
+
+        if overlay_extras:
+            frame = apply_overlay_extras(
+                frame,
+                t,
+                overlay_extras,
+                W,
+                H,
+                scene_seed=int(scene.get("id", 0)),
+            )
 
         if fade < 1.0:
             frame = (frame * fade).astype(np.uint8)

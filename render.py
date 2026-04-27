@@ -18,6 +18,9 @@ import json
 import os
 import sys
 import importlib
+import platform
+import shutil
+import subprocess
 
 # ── MoviePy: suporta 1.x e 2.x ───────────────────────────────────────────────
 try:
@@ -31,6 +34,42 @@ AudioFileClip = _moviepy.AudioFileClip
 # ── Módulos do projeto ────────────────────────────────────────────────────────
 from scenes import build_scene
 from transitions.crossfade import apply_crossfade
+
+
+def detect_hw_encoder() -> tuple[str, list[str]]:
+    """
+    Detecta encoder de hardware disponível no ffmpeg local.
+
+    Retorna:
+      (codec, ffmpeg_params)
+    """
+    if shutil.which("ffmpeg") is None:
+        print("ℹ ffmpeg não encontrado no PATH — usando libx264")
+        return "libx264", []
+
+    try:
+        result = subprocess.run(
+            ["ffmpeg", "-hide_banner", "-encoders"],
+            capture_output=True,
+            text=True,
+            timeout=5,
+            check=False,
+        )
+        encoders = result.stdout
+    except Exception as exc:
+        print(f"⚠ Falha ao detectar encoder de hardware: {exc}")
+        return "libx264", []
+
+    if "h264_nvenc" in encoders:
+        print("🟢 GPU NVIDIA — h264_nvenc")
+        return "h264_nvenc", ["-rc", "vbr", "-cq", "23", "-preset", "p4", "-tune", "hq"]
+
+    if platform.system() == "Darwin" and "h264_videotoolbox" in encoders:
+        print("🟢 Apple VideoToolbox — h264_videotoolbox")
+        return "h264_videotoolbox", ["-allow_sw", "1", "-q:v", "65"]
+
+    print("ℹ Encoder de hardware não encontrado — usando libx264")
+    return "libx264", []
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -74,6 +113,8 @@ def render(project_path: str) -> None:
     fps      = proj.get("fps", 30)
     W, H     = proj.get("resolution", [1920, 1080])
     output   = proj.get("output", "output.mp4")
+    configured_codec = proj.get("encoder")
+    configured_params = proj.get("encoder_params")
     scenes   = proj["scenes"]
     tc       = proj.get("transitions", {})
     def_trans = tc.get("default", "crossfade")
@@ -109,17 +150,30 @@ def render(project_path: str) -> None:
     elif audio_path:
         print(f"⚠   Áudio não encontrado: {audio_path}")
 
+    if configured_codec:
+        codec = configured_codec
+        ffmpeg_params = configured_params if isinstance(configured_params, list) else []
+        print(f"🎛️  Encoder configurado no JSON: {codec}")
+    else:
+        codec, ffmpeg_params = detect_hw_encoder()
+
     # ── Escrita do arquivo ────────────────────────────────────────────────────
     print(f"💾  Escrevendo → {output}")
-    final.write_videofile(
-        output,
-        fps=fps,
-        codec="libx264",
-        audio_codec="aac",
-        preset="medium",
-        threads=4,
-        logger="bar",
-    )
+    write_kwargs = {
+        "fps": fps,
+        "codec": codec,
+        "audio_codec": "aac",
+        "threads": 4,
+        "logger": "bar",
+    }
+
+    if codec == "libx264":
+        write_kwargs["preset"] = "medium"
+
+    if ffmpeg_params:
+        write_kwargs["ffmpeg_params"] = ffmpeg_params
+
+    final.write_videofile(output, **write_kwargs)
     print(f"\n✅  Concluído! → {output}\n")
 
 

@@ -42,6 +42,7 @@ Notas:
 import numpy as np
 from PIL import Image, ImageDraw, ImageFilter, ImageEnhance
 
+from effects.overlay_extras import apply_overlay_extras
 from effects.overlays import apply_fx
 from utils.image import _resize, get_layer_images
 from utils.text import load_font, wrap_text, text_line_height
@@ -212,6 +213,8 @@ def scene_typewriting(scene: dict, W: int, H: int, fps: int):
     font_size: int = int(scene.get("font_size", 56))
     sub_font_size: int = int(scene.get("subtitle_font_size", 32))
     overlays: list = scene.get("overlay", ["grain"])
+    grain_intensity = int(scene.get("grain_intensity", 8))
+    overlay_extras = scene.get("overlay_extras", [])
 
     # Fontes
     font_title = load_font(font_size, bold=True)
@@ -291,7 +294,17 @@ def scene_typewriting(scene: dict, W: int, H: int, fps: int):
             )
 
         # ── Overlays cinematográficos ─────────────────────────────────────────
-        canvas = apply_fx(canvas, t, fps, W, H, overlays)
+        canvas = apply_fx(canvas, t, fps, W, H, overlays, grain_intensity=grain_intensity)
+
+        if overlay_extras:
+            canvas = apply_overlay_extras(
+                canvas,
+                t,
+                overlay_extras,
+                W,
+                H,
+                scene_seed=int(scene.get("id", 0)),
+            )
 
         # ── Fade-in global: multiplica por alpha ──────────────────────────────
         if fade < 1.0:

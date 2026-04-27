@@ -32,7 +32,7 @@ _GRAIN_CACHE: dict = {}
 _GRAIN_POOL = 12  # pool de padrões pré-calculados para variar frame-a-frame
 
 
-def _grain_pool(W: int, H: int, intensity: int = 16) -> list[np.ndarray]:
+def _grain_pool(W: int, H: int, intensity: int = 8) -> list[np.ndarray]:
     """
     Pool de padrões de grão cinematográfico (luminância, 1 canal).
     Cacheado por resolução e intensidade.
@@ -54,6 +54,7 @@ def apply_fx(
     W: int,
     H: int,
     overlays: list[str],
+    grain_intensity: int = 8,
 ) -> np.ndarray:
     """
     Aplica todos os overlays ativos ao frame (in-place seguro — opera em cópia float).
@@ -86,8 +87,9 @@ def apply_fx(
         out *= _vig_mask(W, H)
 
     if "grain" in overlays:
-        pool = _grain_pool(W, H)
-        idx = int(t * fps) % len(pool)
+        pool = _grain_pool(W, H, intensity=int(grain_intensity))
+        # Alterna o padrão a cada 2 frames para reduzir tremulação.
+        idx = (int(t * fps) // 2) % len(pool)
         out = np.clip(out + pool[idx], 0, 255)
 
     return out.astype(np.uint8)

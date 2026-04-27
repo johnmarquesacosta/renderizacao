@@ -6,6 +6,7 @@ import math
 import numpy as np
 from PIL import Image
 
+from effects.overlay_extras import apply_overlay_extras
 from effects.overlays import apply_fx
 from utils.image import _resize, get_layer_images, load_image
 
@@ -17,6 +18,8 @@ def scene_flip_y(scene: dict, W: int, H: int, fps: int):
     dur = float(scene["duration"])
     half = dur / 2.0
     overlays = scene.get("overlay", ["grain", "vignette"])
+    grain_intensity = int(scene.get("grain_intensity", 8))
+    overlay_extras = scene.get("overlay_extras", [])
 
     layers = get_layer_images(scene)
     if not layers:
@@ -58,6 +61,18 @@ def scene_flip_y(scene: dict, W: int, H: int, fps: int):
                 if 0 <= col < W:
                     canvas[:, col] = (canvas[:, col] * (1.0 - alpha_s)).astype(np.uint8)
 
-        return apply_fx(canvas, t, fps, W, H, overlays)
+        canvas = apply_fx(canvas, t, fps, W, H, overlays, grain_intensity=grain_intensity)
+
+        if overlay_extras:
+            canvas = apply_overlay_extras(
+                canvas,
+                t,
+                overlay_extras,
+                W,
+                H,
+                scene_seed=int(scene.get("id", 0)),
+            )
+
+        return canvas
 
     return VideoClip(make_frame, duration=dur).with_fps(fps)

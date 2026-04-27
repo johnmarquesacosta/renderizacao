@@ -23,6 +23,7 @@ import numpy as np
 from PIL import Image, ImageDraw
 
 from effects.ken_burns import kb_frame, resolve_kb
+from effects.overlay_extras import apply_overlay_extras
 from effects.overlays import apply_fx
 from utils.image import get_layer_images, load_image
 
@@ -45,13 +46,15 @@ def _draw_grid(
     alpha: float,
     dx: int,
     dy: int,
-    speed: float,
+    speed_px_per_sec: float,
 ) -> Image.Image:
     """Desenha grid animado sobre canvas PIL."""
     W, H = canvas_pil.size
     draw = ImageDraw.Draw(canvas_pil, "RGBA")
-    ox = int(t * speed * dx) % spacing
-    oy = int(t * speed * dy) % spacing
+    # Velocidade em px/s normalizada para a largura de referência 1920.
+    normalized_speed = float(speed_px_per_sec) * (W / 1920.0)
+    ox = int(t * normalized_speed * dx) % spacing
+    oy = int(t * normalized_speed * dy) % spacing
     line_color = (*color_rgb, int(alpha * 255))
 
     x = ox - spacing
@@ -80,6 +83,8 @@ def scene_mosaic(scene: dict, W: int, H: int, fps: int):
     interval = float(scene.get("appear_interval", dur / (n + 1.5)))
     slide_t = float(scene.get("slide_duration", 0.42))
     overlays = scene.get("overlay", ["grain"])
+    grain_intensity = int(scene.get("grain_intensity", 8))
+    overlay_extras = scene.get("overlay_extras", [])
 
     outer = int(scene.get("outer_margin", 60))
     gap = int(scene.get("inner_gap", 24))
@@ -98,7 +103,7 @@ def scene_mosaic(scene: dict, W: int, H: int, fps: int):
     y_start = outer
 
     # Grid animation direction (random per execution)
-    rng = random.Random()
+    rng = random.Random(scene_id)
     grid_dx = rng.choice([-1, 0, 1])
     grid_dy = rng.choice([-1, 0, 1])
     if grid_dx == 0 and grid_dy == 0:
@@ -115,7 +120,14 @@ def scene_mosaic(scene: dict, W: int, H: int, fps: int):
         base = np.full((H, W, 3), bg, dtype=np.uint8)
         pil = Image.fromarray(base)
         pil = _draw_grid(
-            pil, t, grid_spacing, grid_color, grid_alpha, grid_dx, grid_dy, grid_speed
+            pil,
+            t,
+            grid_spacing,
+            grid_color,
+            grid_alpha,
+            grid_dx,
+            grid_dy,
+            grid_speed,
         )
         canvas = np.array(pil)
 
@@ -137,6 +149,26 @@ def scene_mosaic(scene: dict, W: int, H: int, fps: int):
             if vis > 0:
                 canvas[y_top : y_top + vis, x0 : x0 + slot_w] = frame[:vis]
 
-        return apply_fx(canvas, t, fps, W, H, overlays)
+        canvas = apply_fx(
+            canvas,
+            t,
+            fps,
+            W,
+            H,
+            overlays,
+            grain_intensity=grain_intensity,
+        )
+
+        if overlay_extras:
+            canvas = apply_overlay_extras(
+                canvas,
+                t,
+                overlay_extras,
+                W,
+                H,
+                scene_seed=int(scene_id),
+            )
+
+        return canvas
 
     return VideoClip(make_frame, duration=dur).with_fps(fps)

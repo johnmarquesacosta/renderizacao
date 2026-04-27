@@ -20,6 +20,7 @@ JSON de exemplo:
 import numpy as np
 from PIL import Image, ImageFilter, ImageEnhance
 
+from effects.overlay_extras import apply_overlay_extras
 from effects.overlays import apply_fx
 from utils.image import get_layer_images
 
@@ -93,6 +94,8 @@ def scene_parallax(scene: dict, W: int, H: int, fps: int):
     direction: str = scene.get("direction", "right")
     pan_range: float = float(scene.get("pan_range", 0.12))
     overlays: list = scene.get("overlay", ["grain", "vignette"])
+    grain_intensity = int(scene.get("grain_intensity", 8))
+    overlay_extras = scene.get("overlay_extras", [])
     MARGIN = 1.35  # margem extra de carga para acomodar o pan
 
     layers = get_layer_images(scene)
@@ -133,6 +136,18 @@ def scene_parallax(scene: dict, W: int, H: int, fps: int):
             else:
                 canvas = _composite(canvas, crop, alpha)
 
-        return apply_fx(canvas, t, fps, W, H, overlays)
+        canvas = apply_fx(canvas, t, fps, W, H, overlays, grain_intensity=grain_intensity)
+
+        if overlay_extras:
+            canvas = apply_overlay_extras(
+                canvas,
+                t,
+                overlay_extras,
+                W,
+                H,
+                scene_seed=int(scene.get("id", 0)),
+            )
+
+        return canvas
 
     return VideoClip(make_frame, duration=dur).with_fps(fps)
